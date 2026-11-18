@@ -1,0 +1,80 @@
+### POST recinto
+POST http://localhost:8080/recintos
+content-type: application/json
+
+{
+    "nombre": "Palau Sant Jordi",
+    "direccion": "Passeig Olímpic 5-7",
+    "localidad": "Barcelona",
+    "aforoMaximo": 17000
+}
+
+### GET todos
+GET http://localhost:8080/recintos
+
+### GET por localidad
+GET http://localhost:8080/recintos/localidad/Barcelona
+
+### GET por id (existe)
+GET http://localhost:8080/recintos/6afe0f7370fccc56ae09fbdf
+
+### GET por id (no existe) -> debe dar 404
+GET http://localhost:8080/recintos/123
+
+### GET localidad sin recintos -> debe dar 404
+GET http://localhost:8080/recintos/localidad/Elda
+
+
+### POST evento
+POST http://localhost:8080/eventos
+content-type: application/json
+
+{
+    "nombre": "Summer Party 2027",
+    "fecha": "2027-07-15",
+    "recinto": "6afe0f7370fccc56ae09fbdf",
+    "entradas": [
+        { "tipo": "VIP", "precio": 80, "disponibles": 100 },
+        { "tipo": "General", "precio": 35, "disponibles": 1000 }
+    ]
+}
+
+### GET todos los eventos
+GET http://localhost:8080/eventos
+
+
+
+### GET eventos por localidad
+GET http://localhost:8080/eventos/localidad/Barcelona
+
+### GET todos -> 200, con el recinto completo dentro (populate)
+GET http://localhost:8080/eventos
+
+### GET por localidad -> 200
+GET http://localhost:8080/eventos/localidad/Barcelona
+
+### GET por id -> 200
+GET http://localhost:8080/eventos/6afe101482267dacf8c5083b
+
+### GET datos de entrada VIP -> 200, resultado con precio y disponibles
+GET http://localhost:8080/eventos/entradas/6afe101482267dacf8c5083b/VIP
+
+### PUT restar 5 entradas VIP -> 200, disponibles pasa a 95
+PUT http://localhost:8080/eventos/entradas/6afe101482267dacf8c5083b/VIP/5
+
+### PUT restar demasiadas -> 404
+PUT http://localhost:8080/eventos/entradas/6afe101482267dacf8c5083b/VIP/5000
+
+### GET tipo de entrada inexistente -> 404
+GET http://localhost:8080/eventos/entradas/6afe101482267dacf8c5083b/Platea
+
+### PUT modificar evento -> 200, con el nombre cambiado
+PUT http://localhost:8080/eventos/6afe101482267dacf8c5083b
+content-type: application/json
+
+{
+    "nombre": "Summer Party 2027 - Edición especial"
+}
+
+### GET evento inexistente -> 404
+GET http://localhost:8080/eventos/123
